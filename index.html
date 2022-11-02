@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carne de Casa</title>
+    <style>
+      @font-face {
+        font-family: coolvetica;
+        src: url("fonts/coolvetica rg.otf") format("opentype");
+      }
+
+      body {
+        background-color: rgb(21, 21, 21);
+        font-size: 16px;
+        margin: 0;
+        font-family: "coolvetica", sans-serif;
+      }
+
+      .container {
+        max-width: 960px;
+        display: flex;
+        margin: 1rem auto;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      @media screen and (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+      }
+
+      .container .form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        color: #FDB918;
+        flex: 1;
+      }
+
+      .container .form input {
+        border-radius: 0.2rem;
+        border: 1px solid #FDB918;
+        background-color: #535353;
+        outline: none;
+        width: 100%;
+        box-sizing: border-box;
+        color: white;
+      }
+
+      .container .form button {
+        border-radius: 0.2rem;
+        border: 1px solid #FDB918;
+        background-color: #FDB918;
+        outline: none;
+        width: 100%;
+        box-sizing: border-box;
+        cursor: pointer;
+      }
+
+      .container .preview {
+        text-align: center;
+      }
+
+      canvas {
+        max-width: 480px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form">
+        <div class="form-control">
+          Nome
+          <br />
+          <input type="text" name="name" />
+        </div>
+
+        <div class="form-control">
+          Whatsapp
+          <br />
+          <input type="text" name="whatsapp" />
+        </div>
+
+        <button class="save">Salvar Imagem</button>
+      </div>
+
+      <div class="preview">
+        <canvas width="2481" height="3508"></canvas>
+      </div>
+    </div>
+
+    <script>
+      const canvas = document.querySelector("canvas");
+      const context = canvas.getContext("2d");
+
+      const baseImage = new Image();
+      baseImage.src = "assets/a4 catalogo-01.jpg";
+
+      document.querySelector("button.save").addEventListener("click", () => {
+        const a = document.createElement("a");
+        a.setAttribute("href", canvas.toDataURL("image/jpeg", 1));
+        a.setAttribute(
+          "download",
+          "a4 catalogo-01 (" +
+            document.querySelector('input[name="name"]').value.trim() +
+            ")"
+        );
+        a.click();
+      });
+
+      baseImage.addEventListener("load", () => {
+        function draw() {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(baseImage, 0, 0);
+
+          context.textBaseline = "top";
+          context.font = "73px coolvetica";
+          context.fillStyle = "#EE3324";
+          context.fillText(
+            document.querySelector('input[name="name"]').value.trim(),
+            1335,
+            3310
+          );
+          context.fillText(
+            document.querySelector('input[name="whatsapp"]').value.trim(),
+            1434,
+            3398
+          );
+
+          context.restore();
+
+          setTimeout(draw, 100);
+        }
+
+        draw();
+      });
+    </script>
+  </body>
+</html>
